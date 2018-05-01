@@ -61,7 +61,8 @@
         var $ = layui.jquery, laydate = layui.laydate;
         laydate.render({
             elem: '.field-end_time',
-            min:'0'
+            min:'0',
+	   type:'datetime'
         });
 
         $('#reset_expire').on('click', function(){

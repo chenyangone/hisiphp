@@ -44,6 +44,7 @@
                 <th>贷款利率</th>
                 <th>截止日期</th>
                 <th>点击次数</th>
+                <th>推荐/取消推荐</th>
                 <th>状态</th>
                 <th>操作</th>
             </tr>
@@ -61,6 +62,7 @@
                 <td>{$voa['interest_rate']}</td>
                 <td>{:date('Y-m-d H:i:s', $voa['end_time'])} </td>
                 <td>{$voa['hit_count']}</td>
+                <td><input type="checkbox" name="is_recommend" {if condition="$voa['is_recommend'] eq 1"}checked=""{/if} value="{$voa['is_recommend']}" lay-skin="switch" lay-filter="switchStatus" lay-text="推荐|取消" data-href="{:url('status?field=is_recommend&table=loan_shop&ids='.$voa['id'])}"></td>
                 <td><input type="checkbox" name="status" {if condition="$voa['status'] eq 1"}checked=""{/if} value="{$voa['status']}" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="{:url('status?table=loan_shop&ids='.$voa['id'])}"></td>
                 <td>
 		<div class="layui-btn-group">

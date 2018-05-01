@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:5:{s:52:"/home/zxkj/hisiphp/app/loan_shop/view/loan/index.php";i:1525105990;s:48:"/home/zxkj/hisiphp/app/loan_shop/view/layout.php";i:1525076146;s:50:"/home/zxkj/hisiphp/app/admin/view/block/header.php";i:1525061228;s:49:"/home/zxkj/hisiphp/app/admin/view/block/layui.php";i:1525061228;s:50:"/home/zxkj/hisiphp/app/admin/view/block/footer.php";i:1525061228;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:5:{s:52:"/home/zxkj/hisiphp/app/loan_shop/view/loan/index.php";i:1525144030;s:48:"/home/zxkj/hisiphp/app/loan_shop/view/layout.php";i:1525076146;s:50:"/home/zxkj/hisiphp/app/admin/view/block/header.php";i:1525142568;s:49:"/home/zxkj/hisiphp/app/admin/view/block/layui.php";i:1525061228;s:50:"/home/zxkj/hisiphp/app/admin/view/block/footer.php";i:1525061228;}*/ ?>
 <?php if(input('param.hisi_iframe') || cookie('hisi_iframe')): ?>
 <!DOCTYPE html>
 <html>
@@ -73,9 +73,9 @@ $ca = strtolower(request()->controller().'/'.request()->action());
                 <li class="layui-nav-item <?php if($kk == 1): ?>layui-nav-itemed<?php endif; ?>">
                     <a href="javascript:;"><i class="<?php echo $vv['icon']; ?>"></i><?php echo $vv['title']; ?><span class="layui-nav-more"></span></a>
                     <dl class="layui-nav-child">
-                        <?php if($vv['title'] == '快捷菜单'): ?>
+                        <?php if($vv['title'] == '快捷菜单'): if(is_array($vv['childs']) || $vv['childs'] instanceof \think\Collection || $vv['childs'] instanceof \think\Paginator): $i = 0; $__LIST__ = $vv['childs'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vvv): $mod = ($i % 2 );++$i;?>
                             <dd><a class="admin-nav-item" href="<?php echo url('admin/index/index'); ?>"><i class="aicon ai-shouye"></i> 后台首页</a></dd>
-                            <?php if(is_array($vv['childs']) || $vv['childs'] instanceof \think\Collection || $vv['childs'] instanceof \think\Paginator): $i = 0; $__LIST__ = $vv['childs'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vvv): $mod = ($i % 2 );++$i;?>
+
                             <dd><a class="admin-nav-item" href="<?php if(strpos('http', $vvv['url']) === false): ?>/<?php echo config('sys.admin_path').'/'.$vvv['url']; if($vvv['param']): ?>?<?php echo $vvv['param']; endif; else: ?><?php echo $vvv['url']; endif; ?>"><i class="<?php echo $vvv['icon']; ?>"></i> <?php echo $vvv['title']; ?></a><i data-href="<?php echo url('menu/del?ids='.$vvv['id']); ?>" class="layui-icon j-del-menu">&#xe640;</i></dd>
                             <?php endforeach; endif; else: echo "" ;endif; else: if(is_array($vv['childs']) || $vv['childs'] instanceof \think\Collection || $vv['childs'] instanceof \think\Paginator): $i = 0; $__LIST__ = $vv['childs'];if( count($__LIST__)==0 ) : echo "" ;else: foreach($__LIST__ as $key=>$vvv): $mod = ($i % 2 );++$i;?>
                             <dd><a class="admin-nav-item" href="<?php if(strpos('http', $vvv['url']) === false): ?>/<?php echo config('sys.admin_path').'/'.$vvv['url']; if($vvv['param']): ?>?<?php echo $vvv['param']; endif; else: ?><?php echo $vvv['url']; endif; ?>"><i class="<?php echo $vvv['icon']; ?>"></i> <?php echo $vvv['title']; ?></a></dd>
@@ -170,6 +170,7 @@ $ca = strtolower(request()->controller().'/'.request()->action());
                 <th>贷款利率</th>
                 <th>截止日期</th>
                 <th>点击次数</th>
+                <th>推荐/取消推荐</th>
                 <th>状态</th>
                 <th>操作</th>
             </tr>
@@ -187,6 +188,7 @@ $ca = strtolower(request()->controller().'/'.request()->action());
                 <td><?php echo $voa['interest_rate']; ?></td>
                 <td><?php echo date('Y-m-d H:i:s', $voa['end_time']); ?> </td>
                 <td><?php echo $voa['hit_count']; ?></td>
+                <td><input type="checkbox" name="is_recommend" <?php if($voa['is_recommend'] == 1): ?>checked=""<?php endif; ?> value="<?php echo $voa['is_recommend']; ?>" lay-skin="switch" lay-filter="switchStatus" lay-text="推荐|取消" data-href="<?php echo url('status?field=is_recommend&table=loan_shop&ids='.$voa['id']); ?>"></td>
                 <td><input type="checkbox" name="status" <?php if($voa['status'] == 1): ?>checked=""<?php endif; ?> value="<?php echo $voa['status']; ?>" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="<?php echo url('status?table=loan_shop&ids='.$voa['id']); ?>"></td>
                 <td>
 		<div class="layui-btn-group">
@@ -282,6 +284,7 @@ $ca = strtolower(request()->controller().'/'.request()->action());
                 <th>贷款利率</th>
                 <th>截止日期</th>
                 <th>点击次数</th>
+                <th>推荐/取消推荐</th>
                 <th>状态</th>
                 <th>操作</th>
             </tr>
@@ -299,6 +302,7 @@ $ca = strtolower(request()->controller().'/'.request()->action());
                 <td><?php echo $voa['interest_rate']; ?></td>
                 <td><?php echo date('Y-m-d H:i:s', $voa['end_time']); ?> </td>
                 <td><?php echo $voa['hit_count']; ?></td>
+                <td><input type="checkbox" name="is_recommend" <?php if($voa['is_recommend'] == 1): ?>checked=""<?php endif; ?> value="<?php echo $voa['is_recommend']; ?>" lay-skin="switch" lay-filter="switchStatus" lay-text="推荐|取消" data-href="<?php echo url('status?field=is_recommend&table=loan_shop&ids='.$voa['id']); ?>"></td>
                 <td><input type="checkbox" name="status" <?php if($voa['status'] == 1): ?>checked=""<?php endif; ?> value="<?php echo $voa['status']; ?>" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="<?php echo url('status?table=loan_shop&ids='.$voa['id']); ?>"></td>
                 <td>
 		<div class="layui-btn-group">
@@ -377,6 +381,7 @@ $ca = strtolower(request()->controller().'/'.request()->action());
                 <th>贷款利率</th>
                 <th>截止日期</th>
                 <th>点击次数</th>
+                <th>推荐/取消推荐</th>
                 <th>状态</th>
                 <th>操作</th>
             </tr>
@@ -394,6 +399,7 @@ $ca = strtolower(request()->controller().'/'.request()->action());
                 <td><?php echo $voa['interest_rate']; ?></td>
                 <td><?php echo date('Y-m-d H:i:s', $voa['end_time']); ?> </td>
                 <td><?php echo $voa['hit_count']; ?></td>
+                <td><input type="checkbox" name="is_recommend" <?php if($voa['is_recommend'] == 1): ?>checked=""<?php endif; ?> value="<?php echo $voa['is_recommend']; ?>" lay-skin="switch" lay-filter="switchStatus" lay-text="推荐|取消" data-href="<?php echo url('status?field=is_recommend&table=loan_shop&ids='.$voa['id']); ?>"></td>
                 <td><input type="checkbox" name="status" <?php if($voa['status'] == 1): ?>checked=""<?php endif; ?> value="<?php echo $voa['status']; ?>" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="<?php echo url('status?table=loan_shop&ids='.$voa['id']); ?>"></td>
                 <td>
 		<div class="layui-btn-group">
@@ -482,6 +488,7 @@ $ca = strtolower(request()->controller().'/'.request()->action());
                 <th>贷款利率</th>
                 <th>截止日期</th>
                 <th>点击次数</th>
+                <th>推荐/取消推荐</th>
                 <th>状态</th>
                 <th>操作</th>
             </tr>
@@ -499,6 +506,7 @@ $ca = strtolower(request()->controller().'/'.request()->action());
                 <td><?php echo $voa['interest_rate']; ?></td>
                 <td><?php echo date('Y-m-d H:i:s', $voa['end_time']); ?> </td>
                 <td><?php echo $voa['hit_count']; ?></td>
+                <td><input type="checkbox" name="is_recommend" <?php if($voa['is_recommend'] == 1): ?>checked=""<?php endif; ?> value="<?php echo $voa['is_recommend']; ?>" lay-skin="switch" lay-filter="switchStatus" lay-text="推荐|取消" data-href="<?php echo url('status?field=is_recommend&table=loan_shop&ids='.$voa['id']); ?>"></td>
                 <td><input type="checkbox" name="status" <?php if($voa['status'] == 1): ?>checked=""<?php endif; ?> value="<?php echo $voa['status']; ?>" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="<?php echo url('status?table=loan_shop&ids='.$voa['id']); ?>"></td>
                 <td>
 		<div class="layui-btn-group">

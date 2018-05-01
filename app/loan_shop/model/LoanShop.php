@@ -11,6 +11,7 @@
 namespace app\loan_shop\model;
 
 use think\Model;
+
 /**
  * 贷款Model
  * @package app\admin\model
@@ -33,5 +34,26 @@ class LoanShop extends Model
     {
         return self::column('id,product_name');
     }
+
+    public static function getHotLoan(){
+        $map = [];
+        $map['del_status'] = '0';
+        $filed = '*';
+        $rows = self::where($map)->order('hit_count','desc')->column($filed);
+        return $rows;
+    }
+
+
+    public static function getRecommendLoan(){
+        $map = [];
+        $map['del_status'] = '0';
+        $map['is_recommend'] = '1';
+        $filed = '*';
+        $rows = self::where($map)->order('hit_count','desc')->column($filed);
+        return $rows;
+    }
+
+
+
 
 }
