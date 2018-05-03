@@ -31,7 +31,13 @@ class Loan extends \app\admin\controller\Admin
 
 	$map = [];
 	$map['del_status'] = 0;
-        $data_list = ModelLoanShop::where($map)->paginate(10);
+
+	$sortKey = input('param.q');
+        if(!empty($sortKey)){
+            $data_list = ModelLoanShop::where($map)->order($sortKey,'desc')->paginate(10);
+        }else{
+            $data_list = ModelLoanShop::where($map)->paginate(10);
+        }
 
         Log::record(json_encode($data_list), 'error');
 
@@ -54,7 +60,7 @@ class Loan extends \app\admin\controller\Admin
             $data = $this->request->post();
             Log::record(json_encode($data), 'error');
 
-            $data['end_time'] = strtotime($data['end_time']);
+        //    $data['end_time'] = strtotime($data['end_time']);
             // 验证
           //  $result = $this->validate($data, 'LoanShop');
           //  if($result !== true) {
@@ -63,7 +69,8 @@ class Loan extends \app\admin\controller\Admin
             if (!ModelLoanShop::create($data)) {
                 return $this->error('添加失败！');
             }
-            return $this->success('添加成功。');
+            $url = 'loan_shop/loan/index';
+            return $this->success('添加成功。',$url);
         }
         return $this->fetch('loanform');
     }
@@ -80,11 +87,12 @@ class Loan extends \app\admin\controller\Admin
         $row = ModelLoanShop::where('id', $id)->field('*')->find();
 
         if ($this->request->isPost()) {
+            $url = 'loan_shop/loan/index';
             $data = $this->request->post();
             if (!ModelLoanShop::update($data)) {
                 return $this->error('保存失败！');
             }
-            return $this->success('保存成功。');
+            return $this->success('保存成功。',$url);
         }
     //    $row['tips'] = htmlspecialchars_decode($row['tips']);
     //    $row['value'] = htmlspecialchars_decode($row['value']);

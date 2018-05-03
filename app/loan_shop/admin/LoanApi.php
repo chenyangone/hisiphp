@@ -28,6 +28,7 @@ class LoanApi extends \app\common\controller\Common
         } else {
             $result = [];
         }
+	$result = array_values($result);
         $this->result( $result,0,'success','json');
     }
 

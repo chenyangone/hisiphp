@@ -1,4 +1,4 @@
-<?php if (!defined('THINK_PATH')) exit(); /*a:5:{s:52:"/home/zxkj/hisiphp/app/loan_shop/view/loan/index.php";i:1525144030;s:48:"/home/zxkj/hisiphp/app/loan_shop/view/layout.php";i:1525076146;s:50:"/home/zxkj/hisiphp/app/admin/view/block/header.php";i:1525142568;s:49:"/home/zxkj/hisiphp/app/admin/view/block/layui.php";i:1525061228;s:50:"/home/zxkj/hisiphp/app/admin/view/block/footer.php";i:1525061228;}*/ ?>
+<?php if (!defined('THINK_PATH')) exit(); /*a:5:{s:52:"/home/zxkj/hisiphp/app/loan_shop/view/loan/index.php";i:1525367671;s:48:"/home/zxkj/hisiphp/app/loan_shop/view/layout.php";i:1525076146;s:50:"/home/zxkj/hisiphp/app/admin/view/block/header.php";i:1525142568;s:49:"/home/zxkj/hisiphp/app/admin/view/block/layui.php";i:1525061228;s:50:"/home/zxkj/hisiphp/app/admin/view/block/footer.php";i:1525061228;}*/ ?>
 <?php if(input('param.hisi_iframe') || cookie('hisi_iframe')): ?>
 <!DOCTYPE html>
 <html>
@@ -130,19 +130,36 @@ $ca = strtolower(request()->controller().'/'.request()->action());
 +----------------------------------------------------------------------
 -->
 <form class="page-list-form">
+<div class="layui-collapse page-tips">
+  <div class="layui-colla-item">
+    <h2 class="layui-colla-title">温馨提示</h2>
+    <div class="layui-colla-content">
+      <p>此页面为后台数据管理标准模板，您可以直接复制使用修改</p>
+    </div>
+  </div>
+</div>
 <div class="page-toolbar">
     <div class="layui-btn-group fl">
 
         <a href="<?php echo url('add'); ?>" class="layui-btn layui-btn-primary"><i class="aicon ai-tianjia"></i>添加</a>
-
+      <!--  <a href="<?php echo url('status?table=loan_shop&val=1'); ?>" class="layui-btn layui-btn-primary j-page-btns"><i class="aicon ai-qiyong"></i>启用</a>
+        <a href="<?php echo url('status?table=loan_shop&val=2'); ?>" class="layui-btn layui-btn-primary j-page-btns"><i class="aicon ai-jinyong1"></i>禁用</a>
+-->
     </div>
-    <div class="page-filter fr">
+<div class="page-filter fr">
         <form class="layui-form layui-form-pane" action="<?php echo url(); ?>" method="get">
         <div class="layui-form-item">
-            <label class="layui-form-label">搜索</label>
+          <!--  <div class="layui-input-inline">
+                <select name="q" class="field-q" lay-verify="required"  type="select">
+                    <option value="update_time" selected="">更新时间</option>
+                    <option value="create_time" >创建时间</option>
+                    <option value="hit_count" >点击次数</option>
+                </select>
+            </div>  -->
             <div class="layui-input-inline">
-                <input type="text" name="q" lay-verify="required" placeholder="请输入关键词搜索" autocomplete="off" class="layui-input">
+                <input type="text" name="q" lay-verify="required" placeholder="update_time/create_time/status" autocomplete="off" class="layui-input">
             </div>
+	    <label class="layui-form-label">排序</label>
         </div>
         </form>
     </div>
@@ -152,26 +169,26 @@ $ca = strtolower(request()->controller().'/'.request()->action());
         <colgroup>
             <col width="50">
             <col width="100">
+            <col width="80">
+            <col width="80">
+            <col width="80">
+            <col width="120">
+            <col width="120">
             <col width="100">
-            <col width="200">
-            <col width="100">
-            <col width="100">
-            <col width="300">
-            <col width="50">
             <col>
         </colgroup>
         <thead>
             <tr>
                 <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
                 <th>产品名称</th>
-                <th>产品介绍</th>
-                <th>产品链接地址</th>
-                <th>额度限制</th>
-                <th>贷款利率</th>
-                <th>截止日期</th>
+                <th>额度</th>
+                <th>期限</th>
+                <th>利率</th>
+                <th>修改时间</th>
+                <th>创建时间</th>
                 <th>点击次数</th>
-                <th>推荐/取消推荐</th>
                 <th>状态</th>
+                <th>推荐/取消</th>
                 <th>操作</th>
             </tr>
         </thead>
@@ -182,19 +199,20 @@ $ca = strtolower(request()->controller().'/'.request()->action());
                 <td><input type="checkbox" class="layui-checkbox checkbox-ids" name="ids[]" value="<?php echo $voa['id']; ?>" lay-skin="primary"></td>
 
                 <td><?php echo $voa['product_name']; ?></td>
-                <td><?php echo $voa['product_desc']; ?></td>
-                <td><?php echo $voa['product_app_url']; ?></td>
-                <td><?php echo $voa['money_limit']; ?></td>
+                <td><?php echo $voa['loan_money_limit']; ?></td>
+                <td><?php echo $voa['loan_time_limit']; ?></td>
                 <td><?php echo $voa['interest_rate']; ?></td>
-                <td><?php echo date('Y-m-d H:i:s', $voa['end_time']); ?> </td>
+                <td><?php echo $voa['update_time']; ?></td>
+                <td><?php echo $voa['create_time']; ?> </td>
                 <td><?php echo $voa['hit_count']; ?></td>
-                <td><input type="checkbox" name="is_recommend" <?php if($voa['is_recommend'] == 1): ?>checked=""<?php endif; ?> value="<?php echo $voa['is_recommend']; ?>" lay-skin="switch" lay-filter="switchStatus" lay-text="推荐|取消" data-href="<?php echo url('status?field=is_recommend&table=loan_shop&ids='.$voa['id']); ?>"></td>
                 <td><input type="checkbox" name="status" <?php if($voa['status'] == 1): ?>checked=""<?php endif; ?> value="<?php echo $voa['status']; ?>" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="<?php echo url('status?table=loan_shop&ids='.$voa['id']); ?>"></td>
+                <td><input type="checkbox" name="is_recommend" <?php if($voa['is_recommend'] == 1): ?>checked=""<?php endif; ?> value="<?php echo $voa['is_recommend']; ?>" lay-skin="switch" lay-filter="switchStatus" lay-text="推荐|取消" data-href="<?php echo url('status?field=is_recommend&table=loan_shop&ids='.$voa['id']); ?>"></td>
                 <td>
-		<div class="layui-btn-group">
+
+                    <div class="layui-btn-group">
                         <div class="layui-btn-group">
                             <a href="<?php echo url('edit?id='.$voa['id']); ?>" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe642;</i></a>
-                            <a data-href="<?php echo url('del?id='. $voa['id']); ?>" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe640;</i></a>
+                            <a data-href="<?php echo url('del?id='.$voa['id']); ?>" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe640;</i></a>
                         </div>
                     </div>
                 </td>
@@ -244,19 +262,36 @@ $ca = strtolower(request()->controller().'/'.request()->action());
 +----------------------------------------------------------------------
 -->
 <form class="page-list-form">
+<div class="layui-collapse page-tips">
+  <div class="layui-colla-item">
+    <h2 class="layui-colla-title">温馨提示</h2>
+    <div class="layui-colla-content">
+      <p>此页面为后台数据管理标准模板，您可以直接复制使用修改</p>
+    </div>
+  </div>
+</div>
 <div class="page-toolbar">
     <div class="layui-btn-group fl">
 
         <a href="<?php echo url('add'); ?>" class="layui-btn layui-btn-primary"><i class="aicon ai-tianjia"></i>添加</a>
-
+      <!--  <a href="<?php echo url('status?table=loan_shop&val=1'); ?>" class="layui-btn layui-btn-primary j-page-btns"><i class="aicon ai-qiyong"></i>启用</a>
+        <a href="<?php echo url('status?table=loan_shop&val=2'); ?>" class="layui-btn layui-btn-primary j-page-btns"><i class="aicon ai-jinyong1"></i>禁用</a>
+-->
     </div>
-    <div class="page-filter fr">
+<div class="page-filter fr">
         <form class="layui-form layui-form-pane" action="<?php echo url(); ?>" method="get">
         <div class="layui-form-item">
-            <label class="layui-form-label">搜索</label>
+          <!--  <div class="layui-input-inline">
+                <select name="q" class="field-q" lay-verify="required"  type="select">
+                    <option value="update_time" selected="">更新时间</option>
+                    <option value="create_time" >创建时间</option>
+                    <option value="hit_count" >点击次数</option>
+                </select>
+            </div>  -->
             <div class="layui-input-inline">
-                <input type="text" name="q" lay-verify="required" placeholder="请输入关键词搜索" autocomplete="off" class="layui-input">
+                <input type="text" name="q" lay-verify="required" placeholder="update_time/create_time/status" autocomplete="off" class="layui-input">
             </div>
+	    <label class="layui-form-label">排序</label>
         </div>
         </form>
     </div>
@@ -266,26 +301,26 @@ $ca = strtolower(request()->controller().'/'.request()->action());
         <colgroup>
             <col width="50">
             <col width="100">
+            <col width="80">
+            <col width="80">
+            <col width="80">
+            <col width="120">
+            <col width="120">
             <col width="100">
-            <col width="200">
-            <col width="100">
-            <col width="100">
-            <col width="300">
-            <col width="50">
             <col>
         </colgroup>
         <thead>
             <tr>
                 <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
                 <th>产品名称</th>
-                <th>产品介绍</th>
-                <th>产品链接地址</th>
-                <th>额度限制</th>
-                <th>贷款利率</th>
-                <th>截止日期</th>
+                <th>额度</th>
+                <th>期限</th>
+                <th>利率</th>
+                <th>修改时间</th>
+                <th>创建时间</th>
                 <th>点击次数</th>
-                <th>推荐/取消推荐</th>
                 <th>状态</th>
+                <th>推荐/取消</th>
                 <th>操作</th>
             </tr>
         </thead>
@@ -296,19 +331,20 @@ $ca = strtolower(request()->controller().'/'.request()->action());
                 <td><input type="checkbox" class="layui-checkbox checkbox-ids" name="ids[]" value="<?php echo $voa['id']; ?>" lay-skin="primary"></td>
 
                 <td><?php echo $voa['product_name']; ?></td>
-                <td><?php echo $voa['product_desc']; ?></td>
-                <td><?php echo $voa['product_app_url']; ?></td>
-                <td><?php echo $voa['money_limit']; ?></td>
+                <td><?php echo $voa['loan_money_limit']; ?></td>
+                <td><?php echo $voa['loan_time_limit']; ?></td>
                 <td><?php echo $voa['interest_rate']; ?></td>
-                <td><?php echo date('Y-m-d H:i:s', $voa['end_time']); ?> </td>
+                <td><?php echo $voa['update_time']; ?></td>
+                <td><?php echo $voa['create_time']; ?> </td>
                 <td><?php echo $voa['hit_count']; ?></td>
-                <td><input type="checkbox" name="is_recommend" <?php if($voa['is_recommend'] == 1): ?>checked=""<?php endif; ?> value="<?php echo $voa['is_recommend']; ?>" lay-skin="switch" lay-filter="switchStatus" lay-text="推荐|取消" data-href="<?php echo url('status?field=is_recommend&table=loan_shop&ids='.$voa['id']); ?>"></td>
                 <td><input type="checkbox" name="status" <?php if($voa['status'] == 1): ?>checked=""<?php endif; ?> value="<?php echo $voa['status']; ?>" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="<?php echo url('status?table=loan_shop&ids='.$voa['id']); ?>"></td>
+                <td><input type="checkbox" name="is_recommend" <?php if($voa['is_recommend'] == 1): ?>checked=""<?php endif; ?> value="<?php echo $voa['is_recommend']; ?>" lay-skin="switch" lay-filter="switchStatus" lay-text="推荐|取消" data-href="<?php echo url('status?field=is_recommend&table=loan_shop&ids='.$voa['id']); ?>"></td>
                 <td>
-		<div class="layui-btn-group">
+
+                    <div class="layui-btn-group">
                         <div class="layui-btn-group">
                             <a href="<?php echo url('edit?id='.$voa['id']); ?>" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe642;</i></a>
-                            <a data-href="<?php echo url('del?id='. $voa['id']); ?>" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe640;</i></a>
+                            <a data-href="<?php echo url('del?id='.$voa['id']); ?>" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe640;</i></a>
                         </div>
                     </div>
                 </td>
@@ -341,19 +377,36 @@ $ca = strtolower(request()->controller().'/'.request()->action());
 +----------------------------------------------------------------------
 -->
 <form class="page-list-form">
+<div class="layui-collapse page-tips">
+  <div class="layui-colla-item">
+    <h2 class="layui-colla-title">温馨提示</h2>
+    <div class="layui-colla-content">
+      <p>此页面为后台数据管理标准模板，您可以直接复制使用修改</p>
+    </div>
+  </div>
+</div>
 <div class="page-toolbar">
     <div class="layui-btn-group fl">
 
         <a href="<?php echo url('add'); ?>" class="layui-btn layui-btn-primary"><i class="aicon ai-tianjia"></i>添加</a>
-
+      <!--  <a href="<?php echo url('status?table=loan_shop&val=1'); ?>" class="layui-btn layui-btn-primary j-page-btns"><i class="aicon ai-qiyong"></i>启用</a>
+        <a href="<?php echo url('status?table=loan_shop&val=2'); ?>" class="layui-btn layui-btn-primary j-page-btns"><i class="aicon ai-jinyong1"></i>禁用</a>
+-->
     </div>
-    <div class="page-filter fr">
+<div class="page-filter fr">
         <form class="layui-form layui-form-pane" action="<?php echo url(); ?>" method="get">
         <div class="layui-form-item">
-            <label class="layui-form-label">搜索</label>
+          <!--  <div class="layui-input-inline">
+                <select name="q" class="field-q" lay-verify="required"  type="select">
+                    <option value="update_time" selected="">更新时间</option>
+                    <option value="create_time" >创建时间</option>
+                    <option value="hit_count" >点击次数</option>
+                </select>
+            </div>  -->
             <div class="layui-input-inline">
-                <input type="text" name="q" lay-verify="required" placeholder="请输入关键词搜索" autocomplete="off" class="layui-input">
+                <input type="text" name="q" lay-verify="required" placeholder="update_time/create_time/status" autocomplete="off" class="layui-input">
             </div>
+	    <label class="layui-form-label">排序</label>
         </div>
         </form>
     </div>
@@ -363,26 +416,26 @@ $ca = strtolower(request()->controller().'/'.request()->action());
         <colgroup>
             <col width="50">
             <col width="100">
+            <col width="80">
+            <col width="80">
+            <col width="80">
+            <col width="120">
+            <col width="120">
             <col width="100">
-            <col width="200">
-            <col width="100">
-            <col width="100">
-            <col width="300">
-            <col width="50">
             <col>
         </colgroup>
         <thead>
             <tr>
                 <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
                 <th>产品名称</th>
-                <th>产品介绍</th>
-                <th>产品链接地址</th>
-                <th>额度限制</th>
-                <th>贷款利率</th>
-                <th>截止日期</th>
+                <th>额度</th>
+                <th>期限</th>
+                <th>利率</th>
+                <th>修改时间</th>
+                <th>创建时间</th>
                 <th>点击次数</th>
-                <th>推荐/取消推荐</th>
                 <th>状态</th>
+                <th>推荐/取消</th>
                 <th>操作</th>
             </tr>
         </thead>
@@ -393,19 +446,20 @@ $ca = strtolower(request()->controller().'/'.request()->action());
                 <td><input type="checkbox" class="layui-checkbox checkbox-ids" name="ids[]" value="<?php echo $voa['id']; ?>" lay-skin="primary"></td>
 
                 <td><?php echo $voa['product_name']; ?></td>
-                <td><?php echo $voa['product_desc']; ?></td>
-                <td><?php echo $voa['product_app_url']; ?></td>
-                <td><?php echo $voa['money_limit']; ?></td>
+                <td><?php echo $voa['loan_money_limit']; ?></td>
+                <td><?php echo $voa['loan_time_limit']; ?></td>
                 <td><?php echo $voa['interest_rate']; ?></td>
-                <td><?php echo date('Y-m-d H:i:s', $voa['end_time']); ?> </td>
+                <td><?php echo $voa['update_time']; ?></td>
+                <td><?php echo $voa['create_time']; ?> </td>
                 <td><?php echo $voa['hit_count']; ?></td>
-                <td><input type="checkbox" name="is_recommend" <?php if($voa['is_recommend'] == 1): ?>checked=""<?php endif; ?> value="<?php echo $voa['is_recommend']; ?>" lay-skin="switch" lay-filter="switchStatus" lay-text="推荐|取消" data-href="<?php echo url('status?field=is_recommend&table=loan_shop&ids='.$voa['id']); ?>"></td>
                 <td><input type="checkbox" name="status" <?php if($voa['status'] == 1): ?>checked=""<?php endif; ?> value="<?php echo $voa['status']; ?>" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="<?php echo url('status?table=loan_shop&ids='.$voa['id']); ?>"></td>
+                <td><input type="checkbox" name="is_recommend" <?php if($voa['is_recommend'] == 1): ?>checked=""<?php endif; ?> value="<?php echo $voa['is_recommend']; ?>" lay-skin="switch" lay-filter="switchStatus" lay-text="推荐|取消" data-href="<?php echo url('status?field=is_recommend&table=loan_shop&ids='.$voa['id']); ?>"></td>
                 <td>
-		<div class="layui-btn-group">
+
+                    <div class="layui-btn-group">
                         <div class="layui-btn-group">
                             <a href="<?php echo url('edit?id='.$voa['id']); ?>" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe642;</i></a>
-                            <a data-href="<?php echo url('del?id='. $voa['id']); ?>" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe640;</i></a>
+                            <a data-href="<?php echo url('del?id='.$voa['id']); ?>" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe640;</i></a>
                         </div>
                     </div>
                 </td>
@@ -448,19 +502,36 @@ $ca = strtolower(request()->controller().'/'.request()->action());
 +----------------------------------------------------------------------
 -->
 <form class="page-list-form">
+<div class="layui-collapse page-tips">
+  <div class="layui-colla-item">
+    <h2 class="layui-colla-title">温馨提示</h2>
+    <div class="layui-colla-content">
+      <p>此页面为后台数据管理标准模板，您可以直接复制使用修改</p>
+    </div>
+  </div>
+</div>
 <div class="page-toolbar">
     <div class="layui-btn-group fl">
 
         <a href="<?php echo url('add'); ?>" class="layui-btn layui-btn-primary"><i class="aicon ai-tianjia"></i>添加</a>
-
+      <!--  <a href="<?php echo url('status?table=loan_shop&val=1'); ?>" class="layui-btn layui-btn-primary j-page-btns"><i class="aicon ai-qiyong"></i>启用</a>
+        <a href="<?php echo url('status?table=loan_shop&val=2'); ?>" class="layui-btn layui-btn-primary j-page-btns"><i class="aicon ai-jinyong1"></i>禁用</a>
+-->
     </div>
-    <div class="page-filter fr">
+<div class="page-filter fr">
         <form class="layui-form layui-form-pane" action="<?php echo url(); ?>" method="get">
         <div class="layui-form-item">
-            <label class="layui-form-label">搜索</label>
+          <!--  <div class="layui-input-inline">
+                <select name="q" class="field-q" lay-verify="required"  type="select">
+                    <option value="update_time" selected="">更新时间</option>
+                    <option value="create_time" >创建时间</option>
+                    <option value="hit_count" >点击次数</option>
+                </select>
+            </div>  -->
             <div class="layui-input-inline">
-                <input type="text" name="q" lay-verify="required" placeholder="请输入关键词搜索" autocomplete="off" class="layui-input">
+                <input type="text" name="q" lay-verify="required" placeholder="update_time/create_time/status" autocomplete="off" class="layui-input">
             </div>
+	    <label class="layui-form-label">排序</label>
         </div>
         </form>
     </div>
@@ -470,26 +541,26 @@ $ca = strtolower(request()->controller().'/'.request()->action());
         <colgroup>
             <col width="50">
             <col width="100">
+            <col width="80">
+            <col width="80">
+            <col width="80">
+            <col width="120">
+            <col width="120">
             <col width="100">
-            <col width="200">
-            <col width="100">
-            <col width="100">
-            <col width="300">
-            <col width="50">
             <col>
         </colgroup>
         <thead>
             <tr>
                 <th><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
                 <th>产品名称</th>
-                <th>产品介绍</th>
-                <th>产品链接地址</th>
-                <th>额度限制</th>
-                <th>贷款利率</th>
-                <th>截止日期</th>
+                <th>额度</th>
+                <th>期限</th>
+                <th>利率</th>
+                <th>修改时间</th>
+                <th>创建时间</th>
                 <th>点击次数</th>
-                <th>推荐/取消推荐</th>
                 <th>状态</th>
+                <th>推荐/取消</th>
                 <th>操作</th>
             </tr>
         </thead>
@@ -500,19 +571,20 @@ $ca = strtolower(request()->controller().'/'.request()->action());
                 <td><input type="checkbox" class="layui-checkbox checkbox-ids" name="ids[]" value="<?php echo $voa['id']; ?>" lay-skin="primary"></td>
 
                 <td><?php echo $voa['product_name']; ?></td>
-                <td><?php echo $voa['product_desc']; ?></td>
-                <td><?php echo $voa['product_app_url']; ?></td>
-                <td><?php echo $voa['money_limit']; ?></td>
+                <td><?php echo $voa['loan_money_limit']; ?></td>
+                <td><?php echo $voa['loan_time_limit']; ?></td>
                 <td><?php echo $voa['interest_rate']; ?></td>
-                <td><?php echo date('Y-m-d H:i:s', $voa['end_time']); ?> </td>
+                <td><?php echo $voa['update_time']; ?></td>
+                <td><?php echo $voa['create_time']; ?> </td>
                 <td><?php echo $voa['hit_count']; ?></td>
-                <td><input type="checkbox" name="is_recommend" <?php if($voa['is_recommend'] == 1): ?>checked=""<?php endif; ?> value="<?php echo $voa['is_recommend']; ?>" lay-skin="switch" lay-filter="switchStatus" lay-text="推荐|取消" data-href="<?php echo url('status?field=is_recommend&table=loan_shop&ids='.$voa['id']); ?>"></td>
                 <td><input type="checkbox" name="status" <?php if($voa['status'] == 1): ?>checked=""<?php endif; ?> value="<?php echo $voa['status']; ?>" lay-skin="switch" lay-filter="switchStatus" lay-text="正常|关闭" data-href="<?php echo url('status?table=loan_shop&ids='.$voa['id']); ?>"></td>
+                <td><input type="checkbox" name="is_recommend" <?php if($voa['is_recommend'] == 1): ?>checked=""<?php endif; ?> value="<?php echo $voa['is_recommend']; ?>" lay-skin="switch" lay-filter="switchStatus" lay-text="推荐|取消" data-href="<?php echo url('status?field=is_recommend&table=loan_shop&ids='.$voa['id']); ?>"></td>
                 <td>
-		<div class="layui-btn-group">
+
+                    <div class="layui-btn-group">
                         <div class="layui-btn-group">
                             <a href="<?php echo url('edit?id='.$voa['id']); ?>" class="layui-btn layui-btn-primary layui-btn-sm"><i class="layui-icon">&#xe642;</i></a>
-                            <a data-href="<?php echo url('del?id='. $voa['id']); ?>" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe640;</i></a>
+                            <a data-href="<?php echo url('del?id='.$voa['id']); ?>" class="layui-btn layui-btn-primary layui-btn-sm j-tr-del"><i class="layui-icon">&#xe640;</i></a>
                         </div>
                     </div>
                 </td>
